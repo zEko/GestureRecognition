@@ -32,8 +32,9 @@ background_image = rgb2ycbcr(background_image);
 image_in = rgb2ycbcr(image_in);
 [nr nc nd] = size(image_in);
 no_of_luma_pix = numel(find(background_image(:,:,1) < 60));
+SEGMENTATION_DECIDER = bitshift(nr*nc, -3) % 1/8 of total pix
 
-if (no_of_luma_pix > 0.10*(nr*nc))
+if (no_of_luma_pix > SEGMENTATION_DECIDER)
   background_diff_seg = true;
 else
   skin_color_space_seg = true;
@@ -96,7 +97,7 @@ FOUND_PALM_END = 0;
 innerbreak = false;
 start_of_palm = [0 0]
 end_of_palm = [0 0]
-palm_height = 35;
+palm_height = 39;
 palm_width = uint32(0);
 palm_centre = 0;
 for ir=nr-10:-1:((nr/2))
@@ -211,6 +212,8 @@ finger_db(8).mat = [1 1 0 1 0];
 finger_db(8).name = 'eight';
 finger_db(9).mat = [1 1 1 0 0];
 finger_db(9).name = 'nine';
+finger_db(10).mat = [0 0 0 0 0];
+finger_db(10).name = 'none'
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
