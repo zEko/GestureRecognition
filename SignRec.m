@@ -117,7 +117,6 @@ for ir=nr-10:-1:((nr/2))
     end
   end
   if(innerbreak)
-    ir
     break
   end
   FOUND_PALM_START = 0;
