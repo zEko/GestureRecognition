@@ -124,7 +124,7 @@ for ir=nr-10:-1:((nr/2))
 end
 
 palm_width = end_of_palm(2) - start_of_palm(2);
-palm_centre = bitshift(palm_width,(-1));
+palm_centre = bitshift(palm_width,(-1)); % Divide by 2
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -163,7 +163,7 @@ thumb_mat = object_image(thumb_top:thumb_bottom, thumb_left:thumb_right);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%% Display %%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-figure(2)
+figure(1)
 subplot(2,5,1:5)
 imshow(object_image)
 title('Hand')
