@@ -32,7 +32,7 @@ background_image = rgb2ycbcr(background_image);
 image_in = rgb2ycbcr(image_in);
 [nr nc nd] = size(image_in);
 no_of_luma_pix = numel(find(background_image(:,:,1) < 60));
-SEGMENTATION_DECIDER = bitshift(nr*nc, -3) % 1/8 of total pix
+SEGMENTATION_DECIDER = bitshift(nr*nc, -3); % 1/8 of total pix
 
 if (no_of_luma_pix > SEGMENTATION_DECIDER)
   background_diff_seg = true;
@@ -95,8 +95,8 @@ end
 FOUND_PALM_START = 0;
 FOUND_PALM_END = 0;
 innerbreak = false;
-start_of_palm = [0 0]
-end_of_palm = [0 0]
+start_of_palm = [0 0];
+end_of_palm = [0 0];
 palm_height = 39;
 palm_width = uint32(0);
 palm_centre = 0;
@@ -152,7 +152,7 @@ middle_mat = object_image(middle_top:middle_bottom, middle_left:middle_right);
 index_left = middle_right;
 index_right = index_left+13;
 index_bottom = middle_bottom-5; % index_offset
-index_top = index_bottom-35;
+index_top = index_bottom-20;
 index_mat = object_image(index_top:index_bottom, index_left:index_right);
 
 thumb_left = end_of_palm(2)+10;
@@ -213,7 +213,7 @@ finger_db(8).name = 'eight';
 finger_db(9).mat = [1 1 1 0 0];
 finger_db(9).name = 'nine';
 finger_db(10).mat = [0 0 0 0 0];
-finger_db(10).name = 'none'
+finger_db(10).name = 'none';
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -227,36 +227,36 @@ index = 4;
 thumb = 5;
 
 pinky_total = numel(pinky_mat > 0);
-pinky_threshold = 40;
+pinky_threshold = 50;
 pinky_true = (((numel(find(pinky_mat > 0)))/pinky_total)*100) > pinky_threshold;
 if(pinky_true)
   finger_mat(pinky) = 1;
 end
 
 ring_total = numel(ring_mat > 0);
-ring_threshold = 60;
+ring_threshold = 50;
 ring_true = (((numel(find(ring_mat > 0)))/ring_total)*100) > ring_threshold;
 if(ring_true)
   finger_mat(ring) = 1;
 end
 
 middle_total = numel(middle_mat > 0);
-middle_threshold = 60;
+middle_threshold = 50;
 middle_true = (((numel(find(middle_mat > 0)))/middle_total)*100) > middle_threshold;
 if(middle_true)
   finger_mat(middle) = 1;
 end
 
-index_total = numel(index_mat > 0)
-index_threshold = 40
-index_true = (((numel(find(index_mat > 0)))/index_total)*100) > index_threshold
+index_total = numel(index_mat > 0);
+index_threshold = 50;
+index_true = (((numel(find(index_mat > 0)))/index_total)*100) > index_threshold;
 if(index_true)
-  finger_mat(index) = 1
+  finger_mat(index) = 1;
 end
 
-thumb_total = numel(thumb_mat > 0)
-thumb_threshold = 60
-thumb_true = (((numel(find(thumb_mat > 0)))/thumb_total)*100) > thumb_threshold
+thumb_total = numel(thumb_mat > 0);
+thumb_threshold = 50;
+thumb_true = (((numel(find(thumb_mat > 0)))/thumb_total)*100) > thumb_threshold;
 if(thumb_true)
   finger_mat(thumb) = 1;
 end
