@@ -13,35 +13,40 @@ clc; clf; clear all; close all;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%% Webcam Capture Code %%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% bg = background_image
-bg = imread('bg.jpg');
-
-% image_in = sign_image
+% Image acquisition
+%
+background_image = imread('bg.jpg');
 image_in = imread('hand.jpg');
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%% Segmentation Method %%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-bg = rgb2ycbcr(bg);
+% YCbCr separates luma and chrominance components. We require Cb and Cr
+% to establish the skin color space
+%
+
+background_diff_seg = false;
+skin_color_space_seg = false;
+background_image = rgb2ycbcr(background_image);
 image_in = rgb2ycbcr(image_in);
 [nr nc nd] = size(image_in);
+no_of_luma_pix = numel(find(background_image(:,:,1) < 60));
 
-% IF AMOUNT OF (bg(LUMA)) IN SKIN COLOR SPACE
-% IS > 10% OF IMAGE DO {Background Difference}
-no_of_luma_pix = numel(find(bg(:,:,1) < 60));
-
-SEGMENTATION = 1;
 if (no_of_luma_pix > 0.10*(nr*nc))
-  SEGMENTATION = 0;
+  background_diff_seg = true;
+else
+  skin_color_space_seg = true;
 end
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%% Color Space Segmentation %%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-if (SEGMENTATION == 1)
+% A Skin color space is used to separate the skin and non-skin pixels in
+% the image. 
+%
+
+if (skin_color_space_seg)
   skin_mat = zeros(nr, nc);
   for ir = 1:nr
     for ic = 1:nc
@@ -65,9 +70,13 @@ end % end if
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%% Background Difference %%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-if (SEGMENTATION == 0)
+% Subtract the captured scene/sign from the background image, to segment
+% hand from background.
+%
+
+if (background_diff_seg)
   object_image = zeros(nr,nc);
-  diff_values = bg(:,:,1) - image_in(:,:,1);
+  diff_values = background_image(:,:,1) - image_in(:,:,1);
   THRESHOLD = mean(max(diff_values));
   object_image = (diff_values > THRESHOLD);
 end
@@ -76,106 +85,85 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%% Palm Finder %%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-MINIMUM_PALM_WIDTH = 35;
-palm_height = round(0.8*MINIMUM_PALM_WIDTH);
-palm_width_counter=0;
+% Find the find continous line of object from the bottom of the image. 
+% This will be assumed as the palm base, the palm height is assumed to 
+% be 35px. A initial offset of 10px is ensures we can emit the false 
+% positive,the border of box, in case it appears in the image.
+%
 
-% Flags to indicate if we have found a palm candidate
-palm_dimensions = [0 0];
+FOUND_PALM_START = 0;
+FOUND_PALM_END = 0;
 innerbreak = false;
-
-% Palm is in the bottom half of image
-% a reduction of 10 pix would be needed from floor if the box interferes in conversion
-for ir=nr-15:-1:((nr/2))
+start_of_palm = [0 0]
+end_of_palm = [0 0]
+palm_height = 35;
+palm_width = uint32(0);
+palm_centre = 0;
+for ir=nr-10:-1:((nr/2))
   for ic=1:nc
-
-    % START PALM CANDIDATE
     if(object_image(ir,ic) == 1)
-      palm_width_counter = palm_width_counter + 1;
+      if(FOUND_PALM_START == 0)
+	FOUND_PALM_START = 1;
+	start_of_palm = [ir ic];
+      else 
+	end_of_palm = [ir ic];
+	FOUND_PALM_END = 1;
+      end
+    else
+      if(FOUND_PALM_END == 1)
+	innerbreak = true;
+	break
+      end
     end
-    % END PALM CANDIDATE
-    % START PALM CONDITION
-    if(palm_width_counter > MINIMUM_PALM_WIDTH)
-      palm_dimensions = [ir ic];
-        % we have found our palm candidate, lets break out of scan
-      innerbreak = true;
-      break
-    end
-    % END PALM CONDITION
   end
-  palm_width_counter=0;
-  % Need this to trick Octave
   if(innerbreak)
-    break;
+    ir
+    break
   end
+  FOUND_PALM_START = 0;
+  FOUND_PALM_END = 0;
 end
 
+palm_width = end_of_palm(2) - start_of_palm(2);
+palm_centre = bitshift(palm_width,(-1));
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%% Display %%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-figure(1)
-imshow(object_image)
-hold on
 
-plot(palm_dimensions(2), palm_dimensions(1), 'ro')
-plot(palm_dimensions(2)-MINIMUM_PALM_WIDTH , palm_dimensions(1), 'ro')
-plot(palm_dimensions(2)-(MINIMUM_PALM_WIDTH/2), palm_dimensions(1), 'r*')
-plot([palm_dimensions(2), palm_dimensions(2)-MINIMUM_PALM_WIDTH], [palm_dimensions(1), palm_dimensions(1)], 'b-')
-
-pinky_left = palm_dimensions(2)-MINIMUM_PALM_WIDTH;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%% Finger Matrix %%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pinky_left = start_of_palm(2);
 pinky_right = pinky_left+10;
-pinky_bottom = palm_dimensions(1)-palm_height;
+pinky_bottom = start_of_palm(1)-palm_height;
 pinky_top = pinky_bottom-30;
 pinky_mat = object_image(pinky_top:pinky_bottom, pinky_left:pinky_right);
-plot(pinky_left, pinky_bottom, 'ro')
-plot(pinky_left, pinky_top, 'ro')
-plot(pinky_right, pinky_bottom, 'ro')
-plot(pinky_right, pinky_top, 'ro')
 
 ring_left = pinky_right;
 ring_right = ring_left+10;
 ring_bottom = pinky_bottom-5; % ring_offset
 ring_top = ring_bottom-30;
 ring_mat = object_image(ring_top:ring_bottom, ring_left:ring_right);
-plot(ring_left, ring_bottom, 'yo')
-plot(ring_left, ring_top, 'yo')
-plot(ring_right, ring_bottom, 'yo')
-plot(ring_right, ring_top, 'yo')
 
 middle_left = ring_right;
 middle_right = middle_left+10;
 middle_bottom = ring_bottom-5; % middle_offset
 middle_top = middle_bottom-30;
 middle_mat = object_image(middle_top:middle_bottom, middle_left:middle_right);
-plot(middle_left, middle_bottom, 'bo')
-plot(middle_left, middle_top, 'bo')
-plot(middle_right, middle_bottom, 'bo')
-plot(middle_right, middle_top, 'bo')
 
 index_left = middle_right;
 index_right = index_left+13;
 index_bottom = middle_bottom-5; % index_offset
 index_top = index_bottom-35;
 index_mat = object_image(index_top:index_bottom, index_left:index_right);
-plot(index_left, index_bottom, 'go')
-plot(index_left, index_top, 'go')
-plot(index_right, index_bottom, 'go')
-plot(index_right, index_top, 'go')
 
-thumb_left = palm_dimensions(2);
+thumb_left = end_of_palm(2)+10;
 thumb_right = thumb_left+30;
-thumb_bottom = palm_dimensions(1); % thumb_offset
+thumb_bottom = end_of_palm(1); % thumb_offset
 thumb_top = thumb_bottom-30;
 thumb_mat = object_image(thumb_top:thumb_bottom, thumb_left:thumb_right);
-plot(thumb_left, thumb_bottom, 'mo')
-plot(thumb_left, thumb_top, 'mo')
-plot(thumb_right, thumb_bottom, 'mo')
-plot(thumb_right, thumb_top, 'mo')
 
-title('Hand with Fingers marked')
-hold off;
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%% Display %%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure(2)
 subplot(2,5,1:5)
 imshow(object_image)
