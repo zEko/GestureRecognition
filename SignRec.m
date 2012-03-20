@@ -101,6 +101,7 @@ palm_height = 39;
 palm_width = uint32(0);
 palm_centre = 0;
 palm_repeat_count = 0;
+palm_width_repeat = nc;
 for ir=nr-10:-1:((nr/2))
   for ic=1:nc
     if(object_image(ir,ic) == 1)
@@ -114,6 +115,10 @@ for ir=nr-10:-1:((nr/2))
     else
       if(FOUND_PALM_END == 1)
 	palm_repeat_count = palm_repeat_count + 1;
+	if((end_of_palm(2) - start_of_palm(2)) > (palm_width_repeat+2))
+	  innerbreak = true;
+	end
+	palm_width_repeat = end_of_palm(2) - start_of_palm(2);
 	if(palm_repeat_count == 3) % to check three successive lines of palm
 	  innerbreak = true;
 	end
