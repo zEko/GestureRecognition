@@ -102,7 +102,7 @@ palm_width = uint32(0);
 palm_centre = 0;
 palm_repeat_count = 0;
 palm_width_repeat = nc;
-for ir=nr-10:-1:((nr/2))
+for ir=nr:-1:((nr/2))
   for ic=1:nc
     if(object_image(ir,ic) == 1)
       if(FOUND_PALM_START == 0)
@@ -276,7 +276,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for i=1:9
   if finger_mat == finger_db(i).mat
-    printf("\nThe sign is %s. \n", finger_db(i).name)
+    sprintf('\nThe sign is %s. \n', finger_db(i).name)
   end
 end
 
