@@ -271,7 +271,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for i=1:9
   if finger_mat == finger_db(i).mat
-    printf("\nThe sign is %s. \n", finger_db(i).name)
+    sprintf('\nThe sign is %s. \n', finger_db(i).name)
   end
 end
 
