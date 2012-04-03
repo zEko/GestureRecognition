@@ -184,6 +184,7 @@ if(DEBUG)
   plot([middle_left middle_right],[middle_bottom middle_top],'b')
   plot([ring_left ring_right],[ring_bottom ring_top],'c')
   plot([pinky_left pinky_right],[pinky_bottom pinky_top],'m')
+  plot([start_of_palm(2) end_of_palm(2)],[start_of_palm(1) end_of_palm(1)],'k')
   hold off
 end
 
