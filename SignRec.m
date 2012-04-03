@@ -171,6 +171,22 @@ thumb_bottom = end_of_palm(1); % thumb_offset
 thumb_top = thumb_bottom-30;
 thumb_mat = object_image(thumb_top:thumb_bottom, thumb_left:thumb_right);
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%% Debug %%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+DEBUG = true;
+if(DEBUG)
+  figure(2)
+  imshow(object_image)
+  hold on
+  plot([thumb_left thumb_right],[thumb_bottom thumb_top],'r')
+  plot([index_left index_right],[index_bottom index_top],'g')
+  plot([middle_left middle_right],[middle_bottom middle_top],'b')
+  plot([ring_left ring_right],[ring_bottom ring_top],'c')
+  plot([pinky_left pinky_right],[pinky_bottom pinky_top],'m')
+  hold off
+end
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%% Display %%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
