@@ -28,7 +28,7 @@ for ir=1:1:((nr/2)) % scan from the top, hand is reversed
     else
       if(FOUND_PALM_END == 1)
 	palm_width = end_of_palm(2) - start_of_palm(2);
-	if(palm_width > 15)
+	if(palm_width > 17)
 	  palm_repeat_count = palm_repeat_count + 1;
 	end
 	if(palm_repeat_count > 3)
@@ -46,5 +46,5 @@ for ir=1:1:((nr/2)) % scan from the top, hand is reversed
 end
 
 palm_width = end_of_palm(2) - start_of_palm(2);
-palm_height = uint8(1.6*palm_width);
+palm_height = uint8(1.5*palm_width);
 palm_centre = bitshift(palm_width,(-1)); % Divide by 2
