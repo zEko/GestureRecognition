@@ -24,3 +24,9 @@ finger_db(9).name = 'nine';
 finger_db(10).mat = [0 0 0 0 0];
 finger_db(10).name = 'none';
 
+% False Positives
+% A dirty hack for some signs
+finger_db(11).mat = [0 1 0 1 0];
+finger_db(11).name = 'two';
+
+
