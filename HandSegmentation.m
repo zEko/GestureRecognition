@@ -1,3 +1,8 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%% Image Reading %%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+background_image = imread('capture1.jpg');
+image_in = imread('capture2.jpg');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%% Segmentation Method %%%%%%%%%%
@@ -8,6 +13,7 @@
 
 background_diff_seg = false;
 skin_color_space_seg = false;
+
 background_image = rgb2ycbcr(background_image);
 image_in = rgb2ycbcr(image_in);
 [nr nc nd] = size(image_in);
@@ -31,13 +37,11 @@ if (skin_color_space_seg)
   skin_mat = zeros(nr, nc);
   for ir = 1:nr
     for ic = 1:nc
-      if ((image_in(ir, ic, 1) > 0) && ...
-	  (image_in(ir, ic, 1) < 255))% && ...
-%	  (image_in(ir, ic, 2) > 30) && ...
-%	  (image_in(ir, ic, 2) > 0) && ...
-%	  (image_temp(ir, ic, 3) < 200) && ...
-%	  (image_temp(ir, ic, 3) > 15))
-
+      if ((image_in(ir, ic, 1) > 80) && ...
+	  (image_in(ir, ic, 2) > 125) && ...
+	  (image_in(ir, ic, 2) < 180) && ...
+	  (image_temp(ir, ic, 3) > 190) && ...
+	  (image_temp(ir, ic, 3) < 225))
         skin_mat(ir, ic) = 1;
       else
 	skin_mat(ir, ic) = 0;
@@ -77,15 +81,12 @@ FOUND_PALM_END = 0;
 innerbreak = false;
 start_of_palm = [0 0];
 end_of_palm = [0 0];
-palm_height = 39;
-%palm_width = uint32(0);
 palm_width = end_of_palm(2)-start_of_palm(2);
-palm_centre = 0;
+palm_height = 1.6*palm_width;
 palm_repeat_count = 0;
-palm_width_repeat = nc;
-for ir=nr:-1:((nr/2))
+for ir=1:1:((nr/2)) % scan from the top, hand is reversed
   for ic=1:nc
-    if(object_image(ir,ic) < 254)
+    if(object_image(ir,ic) == 1 )
       if(FOUND_PALM_START == 0)
 	FOUND_PALM_START = 1;
 	start_of_palm = [ir ic];
@@ -95,10 +96,13 @@ for ir=nr:-1:((nr/2))
       end
     else
       if(FOUND_PALM_END == 1)
-	if((palm_width_repeat>10) && (palm_width_repeat > (end_of_palm(2) - start_of_palm(2) + 10)))
+	palm_width = end_of_palm(2) - start_of_palm(2);
+	if(palm_width > 15)
+	  palm_repeat_count = palm_repeat_count + 1;
+	end
+	if(palm_repeat_count > 3)
 	  innerbreak = true;
 	end
-	palm_width_repeat = end_of_palm(2) - start_of_palm(2);
 	break
       end
     end
