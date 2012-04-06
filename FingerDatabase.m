@@ -28,5 +28,7 @@ finger_db(10).name = 'none';
 % A dirty hack for some signs
 finger_db(11).mat = [0 1 0 1 0];
 finger_db(11).name = 'two';
+finger_db(11).mat = [0 1 0 1 1];
+finger_db(11).name = 'three';
 
 
