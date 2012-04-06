@@ -25,22 +25,22 @@ imshow(object_image)
 title('Hand')
 
 subplot(256)
-imshow(pinky_mat)
-title('Pinky')
+imshow(thumb_mat)
+title('Thumb')
 
 subplot(257)
-imshow(ring_mat)
-title('Ring')
+imshow(index_mat)
+title('Index')
 
 subplot(258)
 imshow(middle_mat)
 title('Middle')
 
 subplot(259)
-imshow(index_mat)
-title('Index')
+imshow(ring_mat)
+title('Ring')
 
 subplot(2,5,10)
-imshow(thumb_mat)
-title('Thumb')
+imshow(pinky_mat)
+title('Pinky')
 
