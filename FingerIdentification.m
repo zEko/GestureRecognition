@@ -10,37 +10,32 @@ index = 4;
 thumb = 5;
 
 pinky_total = numel(pinky_mat);
-pinky_threshold = 50;
-pinky_true = (((numel(find(pinky_mat > 0)))/pinky_total)*100) > pinky_threshold;
-if(pinky_true)
+pinky_true = numel(find(pinky_mat == 1));
+if(pinky_true > 50)
   finger_mat(pinky) = 1;
 end
 
 ring_total = numel(ring_mat);
-ring_threshold = 50;
-ring_true = (((numel(find(ring_mat > 0)))/ring_total)*100) > ring_threshold;
-if(ring_true)
+ring_true = numel(find(ring_mat == 1));
+if(ring_true > 50)
   finger_mat(ring) = 1;
 end
 
 middle_total = numel(middle_mat);
-middle_threshold = 50;
-middle_true = (((numel(find(middle_mat > 0)))/middle_total)*100) > middle_threshold;
-if(middle_true)
+middle_true = numel(find(middle_mat == 1));
+if(middle_true > 50)
   finger_mat(middle) = 1;
 end
 
 index_total = numel(index_mat);
-index_threshold = 50;
-index_true = (((numel(find(index_mat > 0)))/index_total)*100) > index_threshold;
-if(index_true)
+index_true = numel(find(index_mat == 1));
+if(index_true > 50)
   finger_mat(index) = 1;
 end
 
 thumb_total = numel(thumb_mat);
-thumb_threshold = 50;
-thumb_true = (((numel(find(thumb_mat > 0)))/thumb_total)*100) > thumb_threshold;
-if(thumb_true)
+thumb_true = numel(find(thumb_mat == 1));
+if(thumb_true > 90)
   finger_mat(thumb) = 1;
 end
 
