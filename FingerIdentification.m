@@ -43,7 +43,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%% Finger output %%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-for i=1:11
+for i=1:12
   if finger_mat == finger_db(i).mat
     sprintf('\nThe sign is %s. \n', finger_db(i).name)
   end
