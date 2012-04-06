@@ -24,8 +24,7 @@ index_left = middle_right;
 index_right = index_left-13;
 index_bottom = middle_bottom+5; % index_offset
 index_top = index_bottom+20;
-index_mat = object_image(index_bottom:index_top, index_right:index_left
-);
+index_mat = object_image(index_bottom:index_top, index_right:index_left);
 
 thumb_left = start_of_palm(2)-10;
 thumb_right = thumb_left-30;
