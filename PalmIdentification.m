@@ -46,5 +46,9 @@ for ir=1:1:((nr/2)) % scan from the top, hand is reversed
 end
 
 palm_width = end_of_palm(2) - start_of_palm(2);
-palm_height = uint8(1.5*palm_width);
+if(TRAINING_MODE)
+  palm_height = palm_height_train;
+else
+  palm_height = uint8(1.5*palm_width);
+end
 palm_centre = bitshift(palm_width,(-1)); % Divide by 2
