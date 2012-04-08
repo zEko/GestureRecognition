@@ -22,3 +22,9 @@ while(true)
   imwrite(sign_capture, sign_capture_file);
   stoppreview(sign_video);
 end
+
+if(TRAINING_MODE)
+  training_image = imread('capture1.jpg');
+  imshow(training_image);
+  palm_height_train = input('Enter the Palm height : ');
+end
