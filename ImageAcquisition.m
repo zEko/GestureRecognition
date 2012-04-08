@@ -10,7 +10,6 @@ sign_counter = 0;
 
 while(true)
   pause(DELAY);
-  sign_counter = sign_counter + 1;
   sign_video = videoinput('winvideo', 1);
   set(sign_video, 'ReturnedColorSpace', 'RGB');
   preview(sign_video);
@@ -21,6 +20,7 @@ while(true)
   sign_capture_file = sprintf('capture%d.jpg', sign_counter);
   imwrite(sign_capture, sign_capture_file);
   stoppreview(sign_video);
+  sign_counter = sign_counter + 1;			      
 end
 
 if(TRAINING_MODE)
