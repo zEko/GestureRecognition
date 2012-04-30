@@ -1,8 +1,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%% Image Reading %%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-background_image = imread('capture1.jpg');
-image_in = imread('capture2.jpg');
+background_image = imread('capture0.jpg');
+image_in = imread('capture1.jpg');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%% Segmentation Method %%%%%%%%%%
