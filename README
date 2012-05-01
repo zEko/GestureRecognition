@@ -7,6 +7,7 @@ to be run in the following order.
 
 1) ImageAcquisition.m :: Used to grab a snapshot from the webcam.
 2) HandSegmentation.m :: Segment the hand from the background.
+[3] TrainingHand.m :: finds the height of the palm.
 3) PalmIdentificaton.m :: Identify the bottom of palm, and the centroid.
 4) FingerMatrix.m :: Construction of finger boxes to extract the individual
    finger data.
@@ -24,6 +25,6 @@ Set the variable `TRAINING_MODE` in matlab before executing ImageAcquisition.m
 to true to enter TRAINING_MODE.
 
  In the training mode the second snapshot will be shown for analysis (first 
-snapshot is the background). As of now only palm width can be explicitly set	
+snapshot is the background). The second snapshot should be used to determine the palm_height.	
 
 

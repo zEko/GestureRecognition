@@ -23,8 +23,3 @@ while(true)
   sign_counter = sign_counter + 1;			      
 end
 
-if(TRAINING_MODE)
-  training_image = imread('capture1.jpg');
-  imshow(training_image);
-  palm_height_train = input('Enter the Palm height : ');
-end
